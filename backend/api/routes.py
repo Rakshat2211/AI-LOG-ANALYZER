@@ -15,9 +15,11 @@ def root():
 def health():
 
     return {
+        "status":"healthy",
 
-        "status": "healthy",
+        "application":"Intelligent Log Analyzer",
 
-        "application": "Intelligent Log Analyzer"
+        "version":"1.0.0",
 
+        "environment":"development"
     }
