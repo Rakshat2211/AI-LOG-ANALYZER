@@ -42,6 +42,11 @@ class Settings:
             "INFO",
         )
 
+        self.DATABASE_URL = os.getenv(
+            "DATABASE_URL",
+            "sqlite:///database/logs.db",
+        )
+
 
 @lru_cache
 def get_settings():
