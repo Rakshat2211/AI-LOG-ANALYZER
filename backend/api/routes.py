@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+from backend.core.config import settings
+
 router = APIRouter()
 
 
@@ -7,7 +9,9 @@ router = APIRouter()
 def root():
 
     return {
+
         "message": "Welcome to Intelligent Log Analyzer API"
+
     }
 
 
@@ -15,11 +19,13 @@ def root():
 def health():
 
     return {
-        "status":"healthy",
 
-        "application":"Intelligent Log Analyzer",
+        "status": "healthy",
 
-        "version":"1.0.0",
+        "application": settings.APP_NAME,
 
-        "environment":"development"
+        "version": settings.APP_VERSION,
+
+        "environment": settings.ENVIRONMENT,
+
     }

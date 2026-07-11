@@ -5,6 +5,7 @@ from backend.core.config import settings
 from backend.core.logger import logger
 from backend.db.base import Base
 from backend.db.database import engine
+from backend.api.logs import router as log_router
 
 # Import models so SQLAlchemy knows about them
 from backend.db.models import Log
@@ -20,6 +21,8 @@ app = FastAPI(
 )
 
 app.include_router(router)
+
+app.include_router(log_router)
 
 
 @app.on_event("startup")
