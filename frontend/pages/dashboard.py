@@ -1,45 +1,20 @@
-import requests
+from datetime import datetime
+
+import pandas as pd
 import streamlit as st
 
-
-BACKEND_URL = "http://127.0.0.1:8000"
-
-
-def get_backend_status():
-    """
-    Calls the FastAPI health endpoint.
-
-    Returns:
-        dict | None
-    """
-
-    try:
-
-        response = requests.get(
-            f"{BACKEND_URL}/health",
-            timeout=5,
-        )
-
-        if response.status_code == 200:
-            return response.json()
-
-    except requests.exceptions.RequestException:
-        return None
-
-    return None
+from services.api import (
+    create_log,
+    get_backend_status,
+    get_logs,
+)
 
 
 def render_dashboard():
 
     st.title("🤖 Intelligent Log Analyzer")
 
-    st.write(
-        "AI Powered Intelligent Log Analysis Platform"
-    )
-
     st.divider()
-
-    st.subheader("Backend Status")
 
     backend = get_backend_status()
 
@@ -75,10 +50,99 @@ def render_dashboard():
 
     else:
 
-        st.error("Backend is Offline")
+        st.error("Backend Offline")
+
+        return
 
     st.divider()
 
-    st.info(
-        "Milestone 1 - Part 4\n\nFrontend is now communicating with the FastAPI backend."
-    )
+    st.header("Create New Log")
+
+    with st.form("log_form"):
+
+        timestamp = st.datetime_input(
+            "Timestamp",
+            datetime.now(),
+        )
+
+        source = st.selectbox(
+
+            "Source",
+
+            [
+
+                "Kubernetes",
+
+                "Docker",
+
+                "Jenkins",
+
+            ],
+
+        )
+
+        level = st.selectbox(
+
+            "Level",
+
+            [
+
+                "INFO",
+
+                "WARNING",
+
+                "ERROR",
+
+                "CRITICAL",
+
+            ],
+
+        )
+
+        message = st.text_area("Message")
+
+        submitted = st.form_submit_button("Create Log")
+
+        if submitted:
+
+            payload = {
+
+                "timestamp": timestamp.isoformat(),
+
+                "source": source,
+
+                "level": level,
+
+                "message": message,
+
+            }
+
+            result = create_log(payload)
+
+            if result:
+
+                st.success("Log Created Successfully")
+                st.rerun()  # Refresh the page to show the new log
+
+            else:
+
+                st.error("Unable to create log")
+
+    st.divider()
+
+    st.header("Stored Logs")
+
+    logs = get_logs()
+
+    if logs:
+
+        df = pd.DataFrame(logs)
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+        )
+
+    else:
+
+        st.info("No Logs Found")
