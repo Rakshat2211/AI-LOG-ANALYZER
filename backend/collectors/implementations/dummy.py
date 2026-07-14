@@ -18,18 +18,16 @@ class DummyCollector(BaseCollector):
 
             f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}|Dummy|ERROR|Payment Service Crashed",
 
-            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}|Dummy|WARNING|CPU Usage High",
+            f"THIS IS NOT A VALID LOG",
 
         ]
 
         parsed_logs = []
 
         for log in raw_logs:
+            parsed = self.parser.parse(log)
 
-            parsed_logs.append(
-
-                self.parser.parse(log)
-
-            )
+            if parsed is not None:
+                parsed_logs.append(parsed)
 
         return parsed_logs

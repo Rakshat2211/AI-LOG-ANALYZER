@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from backend.core.logger import logger
 from backend.parsers.base import BaseParser
 
 
@@ -7,19 +7,37 @@ class DummyParser(BaseParser):
 
     def parse(self, raw_log):
 
-        parts = raw_log.split("|")
+        try:
 
-        return {
+            parts = raw_log.split("|")
 
-            "timestamp": datetime.strptime(
-                parts[0],
-                "%Y-%m-%d %H:%M:%S"
-            ),
+            if len(parts) != 4:
 
-            "source": parts[1],
+                raise ValueError(
+                    "Invalid log format."
+                )
 
-            "level": parts[2],
+            return {
 
-            "message": parts[3],
+                "timestamp": datetime.strptime(
+                    parts[0],
+                    "%Y-%m-%d %H:%M:%S",
+                ),
 
-        }
+                "source": parts[1],
+
+                "level": parts[2],
+
+                "message": parts[3],
+
+            }
+
+        except Exception as error:
+
+            logger.error(
+                "Failed to parse log '%s': %s",
+                raw_log,
+                error,
+            )
+
+            return None
