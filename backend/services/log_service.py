@@ -10,15 +10,10 @@ def create_log(
 ):
 
     db_log = Log(
-
         timestamp=log.timestamp,
-
         source=log.source,
-
         level=log.level,
-
         message=log.message,
-
     )
 
     db.add(db_log)
