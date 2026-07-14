@@ -1,45 +1,35 @@
 from datetime import datetime
 
 from backend.collectors.base import BaseCollector
+from backend.parsers.dummy_parser import DummyParser
 
 
 class DummyCollector(BaseCollector):
 
+    def __init__(self):
+
+        self.parser = DummyParser()
+
     def collect(self):
 
-        return [
+        raw_logs = [
 
-            {
-                "timestamp": datetime.now(),
+            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}|Dummy|INFO|Application Started",
 
-                "source": "Dummy",
+            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}|Dummy|ERROR|Payment Service Crashed",
 
-                "level": "INFO",
-
-                "message": "Application Started",
-
-            },
-
-            {
-                "timestamp": datetime.now(),
-
-                "source": "Dummy",
-
-                "level": "ERROR",
-
-                "message": "Payment Service Crashed",
-
-            },
-
-            {
-                "timestamp": datetime.now(),
-
-                "source": "Dummy",
-
-                "level": "WARNING",
-
-                "message": "CPU Usage High",
-
-            },
+            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}|Dummy|WARNING|CPU Usage High",
 
         ]
+
+        parsed_logs = []
+
+        for log in raw_logs:
+
+            parsed_logs.append(
+
+                self.parser.parse(log)
+
+            )
+
+        return parsed_logs

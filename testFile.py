@@ -1,7 +1,7 @@
-from backend.collectors.manager import CollectorManager
+from backend.collectors.implementations.dummy import DummyCollector
 
-manager = CollectorManager()
+collector = DummyCollector()
 
-logs = manager.collect_all_logs()
+logs = collector.collect()
 
 print(logs)
