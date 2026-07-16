@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from backend.collectors.implementations.dummy import DummyCollector
+from backend.collectors.implementations.docker import DockerCollector
 from backend.schemas.log import LogCreate
 from backend.services.log_service import create_log
 
@@ -13,6 +14,7 @@ class CollectorManager:
 
         self.collectors = [
             DummyCollector(),
+            DockerCollector(),
         ]
 
     def collect_all_logs(self):
