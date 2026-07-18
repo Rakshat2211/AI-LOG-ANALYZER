@@ -7,6 +7,7 @@ from backend.db.base import Base
 from backend.db.database import engine
 from backend.api.logs import router as log_router
 from backend.api.collectors import router as collector_router
+from backend.api.analysis import router as analysis_router
 
 # Import models so SQLAlchemy knows about them
 from backend.db.models import Log
@@ -27,6 +28,7 @@ app.include_router(log_router)
 
 app.include_router(collector_router)
 
+app.include_router(analysis_router)
 
 @app.on_event("startup")
 async def startup():
