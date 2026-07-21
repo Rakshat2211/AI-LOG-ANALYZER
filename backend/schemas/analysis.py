@@ -18,4 +18,6 @@ class AnalysisResponse(BaseModel):
 
     anomalies: list[str]
 
+    analysis_context: str
+
     logs: list[LogResponse]
