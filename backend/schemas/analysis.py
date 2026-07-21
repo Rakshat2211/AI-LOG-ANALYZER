@@ -1,15 +1,19 @@
 from pydantic import BaseModel
 
-from .log import LogResponse
+from backend.schemas.log import LogResponse
 
 
 class AnalysisResponse(BaseModel):
-    """
-    Response returned by the Analysis API.
-
-    For now, it simply returns the logs that will be
-    analyzed in future milestones.
-    """
-
     total_logs: int
+
+    info_logs: int
+
+    warning_logs: int
+
+    error_logs: int
+
+    logs_by_source: dict[str, int]
+
+    most_common_level: str | None
+
     logs: list[LogResponse]
