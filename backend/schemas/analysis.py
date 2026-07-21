@@ -16,4 +16,6 @@ class AnalysisResponse(BaseModel):
 
     most_common_level: str | None
 
+    anomalies: list[str]
+
     logs: list[LogResponse]

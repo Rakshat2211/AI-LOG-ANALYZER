@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from backend.schemas.analysis import AnalysisResponse
 from backend.schemas.log import LogResponse
 from backend.services.log_service import get_logs
+from backend.services.anomaly_service import detect_anomalies
 
 
 def get_logs_for_analysis(
@@ -16,7 +17,7 @@ def get_logs_for_analysis(
         LogResponse.model_validate(log)
         for log in logs
     ]
-
+    anomalies = detect_anomalies(response_logs)
     level_counter = Counter(
         log.level
         for log in response_logs
@@ -44,5 +45,6 @@ def get_logs_for_analysis(
             else None
         ),
 
+        anomalies=anomalies,
         logs=response_logs,
     )
