@@ -1,10 +1,10 @@
-from collections import Counter
-
 from sqlalchemy.orm import Session
 
 from backend.schemas.analysis import AnalysisResponse
 from backend.schemas.log import LogResponse
+
 from backend.services.log_service import get_logs
+from backend.services.statistics_service import generate_statistics
 from backend.services.anomaly_service import detect_anomalies
 from backend.services.context_builder import build_analysis_context
 
@@ -12,67 +12,51 @@ from backend.services.context_builder import build_analysis_context
 def get_logs_for_analysis(
     db: Session,
 ):
-    # Step 1: Fetch logs
+    # Retrieve logs
     logs = get_logs(db)
 
-    # Step 2: Convert SQLAlchemy models to Pydantic models
     response_logs = [
         LogResponse.model_validate(log)
         for log in logs
     ]
 
-    # Step 3: Generate statistics
-    level_counter = Counter(
-        log.level
-        for log in response_logs
-    )
+    # Generate statistics
+    statistics = generate_statistics(response_logs)
 
-    source_counter = Counter(
-        log.source
-        for log in response_logs
-    )
-
-    # Step 4: Detect anomalies
+    # Detect anomalies
     anomalies = detect_anomalies(response_logs)
 
-    # Step 5: Build AI context
+    # Build context
     analysis_context = build_analysis_context(
-        total_logs=len(response_logs),
 
-        info_logs=level_counter.get("INFO", 0),
+        total_logs=statistics["total_logs"],
 
-        warning_logs=level_counter.get("WARNING", 0),
+        info_logs=statistics["info_logs"],
 
-        error_logs=level_counter.get("ERROR", 0),
+        warning_logs=statistics["warning_logs"],
 
-        logs_by_source=dict(source_counter),
+        error_logs=statistics["error_logs"],
 
-        most_common_level=(
-            level_counter.most_common(1)[0][0]
-            if level_counter
-            else None
-        ),
+        logs_by_source=statistics["logs_by_source"],
+
+        most_common_level=statistics["most_common_level"],
 
         anomalies=anomalies,
     )
 
-    # Step 6: Return API response
     return AnalysisResponse(
-        total_logs=len(response_logs),
 
-        info_logs=level_counter.get("INFO", 0),
+        total_logs=statistics["total_logs"],
 
-        warning_logs=level_counter.get("WARNING", 0),
+        info_logs=statistics["info_logs"],
 
-        error_logs=level_counter.get("ERROR", 0),
+        warning_logs=statistics["warning_logs"],
 
-        logs_by_source=dict(source_counter),
+        error_logs=statistics["error_logs"],
 
-        most_common_level=(
-            level_counter.most_common(1)[0][0]
-            if level_counter
-            else None
-        ),
+        logs_by_source=statistics["logs_by_source"],
+
+        most_common_level=statistics["most_common_level"],
 
         anomalies=anomalies,
 
