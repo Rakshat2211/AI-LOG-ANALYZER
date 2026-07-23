@@ -7,6 +7,7 @@ from backend.services.log_service import get_logs
 from backend.services.statistics_service import generate_statistics
 from backend.services.anomaly_service import detect_anomalies
 from backend.services.context_builder import build_analysis_context
+from backend.services.llm_service import generate_ai_analysis
 
 
 def get_logs_for_analysis(
@@ -44,6 +45,9 @@ def get_logs_for_analysis(
         anomalies=anomalies,
     )
 
+    # Generate AI summary
+    ai_summary = generate_ai_analysis(analysis_context)
+
     return AnalysisResponse(
 
         total_logs=statistics["total_logs"],
@@ -61,6 +65,8 @@ def get_logs_for_analysis(
         anomalies=anomalies,
 
         analysis_context=analysis_context,
+
+        ai_summary=ai_summary,
 
         logs=response_logs,
     )

@@ -20,4 +20,6 @@ class AnalysisResponse(BaseModel):
 
     analysis_context: str
 
+    ai_summary: str
+
     logs: list[LogResponse]
