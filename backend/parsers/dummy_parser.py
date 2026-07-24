@@ -1,6 +1,7 @@
 from datetime import datetime
 from backend.core.logger import logger
 from backend.parsers.base import BaseParser
+from backend.schemas.parsed_log import ParsedLog
 
 
 class DummyParser(BaseParser):
@@ -17,20 +18,20 @@ class DummyParser(BaseParser):
                     "Invalid log format."
                 )
 
-            return {
+            return ParsedLog(
 
-                "timestamp": datetime.strptime(
+                timestamp=datetime.strptime(
                     parts[0],
                     "%Y-%m-%d %H:%M:%S",
                 ),
 
-                "source": parts[1],
+                source=parts[1],
 
-                "level": parts[2],
+                level=parts[2],
 
-                "message": parts[3],
+                message=parts[3],
 
-            }
+            )
 
         except Exception as error:
 

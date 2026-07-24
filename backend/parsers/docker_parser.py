@@ -2,6 +2,7 @@ from datetime import datetime
 
 from backend.core.logger import logger
 from backend.parsers.base import BaseParser
+from backend.schemas.parsed_log import ParsedLog
 
 
 class DockerParser(BaseParser):
@@ -10,17 +11,17 @@ class DockerParser(BaseParser):
 
         try:
 
-            return {
+            return ParsedLog(
 
-                "timestamp": datetime.now(),
+                timestamp=datetime.now(),
 
-                "source": "Docker",
+                source="Docker",
 
-                "level": "INFO",
+                level="INFO",
 
-                "message": raw_log.strip(),
+                message=raw_log.strip(),
 
-            }
+            )
 
         except Exception as error:
 

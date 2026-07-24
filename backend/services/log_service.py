@@ -2,11 +2,12 @@ from sqlalchemy.orm import Session
 
 from backend.db.models.log import Log
 from backend.schemas.log import LogCreate
+from backend.schemas.parsed_log import ParsedLog
 
 
 def create_log(
     db: Session,
-    log: LogCreate,
+    log: LogCreate | ParsedLog,
 ):
 
     db_log = Log(
