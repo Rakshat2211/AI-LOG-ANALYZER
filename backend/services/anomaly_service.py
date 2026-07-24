@@ -6,16 +6,17 @@ from backend.schemas.log import LogResponse
 def detect_anomalies(
     logs: list[LogResponse],
 ) -> list[str]:
-    """
-    Detects simple anomalies in the log dataset.
-    """
 
     anomalies = []
 
     if not logs:
-        anomalies.append("No logs available.")
-
         return anomalies
+
+    total_logs = len(logs)
+
+    # -------------------------
+    # Count Log Levels
+    # -------------------------
 
     level_counter = Counter(
         log.level
@@ -27,25 +28,63 @@ def detect_anomalies(
         for log in logs
     )
 
-    total_logs = len(logs)
+    message_counter = Counter(
+        log.message
+        for log in logs
+    )
 
-    info = level_counter.get("INFO", 0)
+    # -------------------------
+    # High Error Rate
+    # -------------------------
 
-    warning = level_counter.get("WARNING", 0)
+    if level_counter["ERROR"] / total_logs > 0.20:
 
-    error = level_counter.get("ERROR", 0)
+        anomalies.append(
+            "High error rate detected."
+        )
 
-    # Rule 1
-    if error > (info + warning):
-        anomalies.append("High error rate detected.")
+    # -------------------------
+    # High Warning Rate
+    # -------------------------
 
-    # Rule 2
+    if level_counter["WARNING"] / total_logs > 0.30:
+
+        anomalies.append(
+            "Large number of warning logs detected."
+        )
+
+    # -------------------------
+    # Docker Dominance
+    # -------------------------
+
     for source, count in source_counter.items():
 
-        if count / total_logs > 0.7:
+        if count / total_logs > 0.70:
 
             anomalies.append(
                 f"{source} is generating unusually high log volume."
             )
+
+    # -------------------------
+    # Repeated Errors
+    # -------------------------
+
+    for message, count in message_counter.items():
+
+        if count >= 5:
+
+            anomalies.append(
+                f"Repeated log message detected ({count} occurrences): {message}"
+            )
+
+    # -------------------------
+    # Healthy System
+    # -------------------------
+
+    if level_counter["ERROR"] == 0:
+
+        anomalies.append(
+            "No error logs detected."
+        )
 
     return anomalies
