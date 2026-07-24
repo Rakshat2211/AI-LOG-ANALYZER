@@ -47,6 +47,23 @@ class Settings:
             "sqlite:///database/logs.db",
         )
 
+        self.OLLAMA_MODEL = os.getenv(
+            "OLLAMA_MODEL",
+            "qwen2.5:7b",
+        )
+
+        self.OLLAMA_HOST = os.getenv(
+            "OLLAMA_HOST",
+            "http://localhost:11434",
+        )
+
+        self.OLLAMA_TEMPERATURE = float(
+            os.getenv(
+                "OLLAMA_TEMPERATURE",
+                "0.2",
+            )
+        )
+
 
 @lru_cache
 def get_settings():
