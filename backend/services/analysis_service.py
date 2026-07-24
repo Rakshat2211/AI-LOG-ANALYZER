@@ -29,18 +29,17 @@ def get_logs_for_analysis(
 
     # Build context
     analysis_context = build_analysis_context(
+        total_logs=statistics.total_logs,
 
-        total_logs=statistics["total_logs"],
+        info_logs=statistics.info_logs,
 
-        info_logs=statistics["info_logs"],
+        warning_logs=statistics.warning_logs,
 
-        warning_logs=statistics["warning_logs"],
+        error_logs=statistics.error_logs,
 
-        error_logs=statistics["error_logs"],
+        logs_by_source=statistics.logs_by_source,
 
-        logs_by_source=statistics["logs_by_source"],
-
-        most_common_level=statistics["most_common_level"],
+        most_common_level=statistics.most_common_level,
 
         anomalies=anomalies,
     )
@@ -50,17 +49,17 @@ def get_logs_for_analysis(
 
     return AnalysisResponse(
 
-        total_logs=statistics["total_logs"],
+        total_logs=statistics.total_logs,
 
-        info_logs=statistics["info_logs"],
+        info_logs=statistics.info_logs,
 
-        warning_logs=statistics["warning_logs"],
+        warning_logs=statistics.warning_logs,
 
-        error_logs=statistics["error_logs"],
+        error_logs=statistics.error_logs,
 
-        logs_by_source=statistics["logs_by_source"],
+        logs_by_source=statistics.logs_by_source,
 
-        most_common_level=statistics["most_common_level"],
+        most_common_level=statistics.most_common_level,
 
         anomalies=anomalies,
 

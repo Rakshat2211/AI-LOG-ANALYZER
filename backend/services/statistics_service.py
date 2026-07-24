@@ -1,13 +1,15 @@
 from collections import Counter
 
 from backend.schemas.log import LogResponse
+from backend.schemas.statistics import StatisticsResponse
 
 
 def generate_statistics(
     logs: list[LogResponse],
-) -> dict:
+) -> StatisticsResponse:
     """
-    Generates statistical information from logs.
+    Generates statistical information
+    from normalized logs.
     """
 
     level_counter = Counter(
@@ -20,19 +22,30 @@ def generate_statistics(
         for log in logs
     )
 
-    return {
+    return StatisticsResponse(
 
-        "total_logs": len(logs),
+        total_logs=len(logs),
 
-        "info_logs": level_counter.get("INFO", 0),
+        info_logs=level_counter.get(
+            "INFO",
+            0,
+        ),
 
-        "warning_logs": level_counter.get("WARNING", 0),
+        warning_logs=level_counter.get(
+            "WARNING",
+            0,
+        ),
 
-        "error_logs": level_counter.get("ERROR", 0),
+        error_logs=level_counter.get(
+            "ERROR",
+            0,
+        ),
 
-        "logs_by_source": dict(source_counter),
+        logs_by_source=dict(
+            source_counter
+        ),
 
-        "most_common_level": (
+        most_common_level=(
 
             level_counter.most_common(1)[0][0]
 
@@ -41,4 +54,4 @@ def generate_statistics(
             else None
 
         ),
-    }
+    )
