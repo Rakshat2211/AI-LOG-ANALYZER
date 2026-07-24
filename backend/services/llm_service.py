@@ -1,3 +1,7 @@
+from backend.services.prompt_builder import (
+    build_prompt,
+)
+
 from backend.services.ollama_service import (
     generate_response,
 )
@@ -7,10 +11,14 @@ def generate_ai_analysis(
     analysis_context: str,
 ) -> str:
     """
-    Generates an AI-powered analysis
-    using the configured LLM provider.
+    Generates AI analysis
+    from structured log context.
     """
 
-    return generate_response(
+    prompt = build_prompt(
         analysis_context
+    )
+
+    return generate_response(
+        prompt
     )
