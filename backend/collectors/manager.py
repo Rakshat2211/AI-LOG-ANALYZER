@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 
 from backend.collectors.implementations.dummy import DummyCollector
 from backend.collectors.implementations.docker import DockerCollector
-from backend.schemas.log import LogCreate
 from backend.services.log_service import create_log
 
 
@@ -23,22 +22,29 @@ class CollectorManager:
 
         for collector in self.collectors:
 
-            logs = collector.collect()
+            try:
 
-            for log in logs:
+                logs = collector.collect()
 
-                log_schema = LogCreate(
-                    timestamp=log["timestamp"],
-                    source=log["source"],
-                    level=log["level"],
-                    message=log["message"],
+                for log in logs:
+
+                    create_log(
+                        self.db,
+                        log,
+                    )
+
+                    total_logs += 1
+
+            except Exception as error:
+
+                from backend.core.logger import logger
+
+                logger.exception(
+                    "%s collector failed: %s",
+                    collector.__class__.__name__,
+                    error,
                 )
 
-                create_log(
-                    self.db,
-                    log_schema,
-                )
-
-                total_logs += 1
+                continue
 
         return total_logs

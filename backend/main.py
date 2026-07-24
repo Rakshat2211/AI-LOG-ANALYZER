@@ -8,6 +8,7 @@ from backend.db.database import engine
 from backend.api.logs import router as log_router
 from backend.api.collectors import router as collector_router
 from backend.api.analysis import router as analysis_router
+from backend.scheduler.collector_scheduler import CollectorScheduler
 
 # Import models so SQLAlchemy knows about them
 from backend.db.models import Log
@@ -30,6 +31,8 @@ app.include_router(collector_router)
 
 app.include_router(analysis_router)
 
+collector_scheduler = CollectorScheduler(interval=settings.COLLECTOR_INTERVAL)
+
 @app.on_event("startup")
 async def startup():
 
@@ -37,10 +40,13 @@ async def startup():
 
     logger.info("Database tables created.")
 
+    collector_scheduler.start()
+
     logger.info("Application Started")
 
 
 @app.on_event("shutdown")
 async def shutdown():
 
+    collector_scheduler.stop()
     logger.info("Application Stopped")

@@ -64,6 +64,13 @@ class Settings:
             )
         )
 
+        self.COLLECTOR_INTERVAL = int(
+            os.getenv(
+                "COLLECTOR_INTERVAL",
+                "60",
+            )
+        )
+
 
 @lru_cache
 def get_settings():
