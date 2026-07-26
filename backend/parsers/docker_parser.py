@@ -26,7 +26,7 @@ class DockerParser(BaseParser):
         except Exception as error:
 
             logger.error(
-                "Failed to parse Docker log '%s': %s",
+                "Failed to parse Docker log '{}': {}",
                 raw_log,
                 error,
             )
