@@ -17,15 +17,18 @@ Do not invent information.
 
 If information is missing, clearly state that.
 
-Provide:
+Provide a concise report.
+
+Limit the total response to approximately 150 words.
+
+Use the following format:
 
 1. Executive Summary
-
 2. Root Cause
-
 3. Severity
-
 4. Recommendations
+
+Do not repeat the supplied statistics.
 """
 
     return f"""

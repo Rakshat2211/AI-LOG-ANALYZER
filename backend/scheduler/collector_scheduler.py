@@ -11,7 +11,7 @@ class CollectorScheduler:
     in a background thread.
     """
 
-    def __init__(self, interval: int = 60):
+    def __init__(self, interval: int = 1800):
 
         self.interval = interval
 

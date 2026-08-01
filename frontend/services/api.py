@@ -56,3 +56,37 @@ def get_logs():
     except requests.RequestException:
 
         return []
+
+def get_analysis():
+
+    try:
+
+        response = requests.get(
+            f"{BACKEND_URL}/analysis",
+            timeout=30,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+    except requests.RequestException:
+
+        return None
+
+def get_ai_analysis():
+
+    try:
+
+        response = requests.get(
+            f"{BACKEND_URL}/analysis/ai",
+            timeout=300,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+    except requests.RequestException:
+
+        return None

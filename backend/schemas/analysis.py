@@ -4,6 +4,7 @@ from backend.schemas.log import LogResponse
 
 
 class AnalysisResponse(BaseModel):
+
     total_logs: int
 
     info_logs: int
@@ -23,3 +24,8 @@ class AnalysisResponse(BaseModel):
     ai_summary: str
 
     logs: list[LogResponse]
+
+
+class AIAnalysisResponse(BaseModel):
+
+    ai_summary: str

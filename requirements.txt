@@ -71,3 +71,8 @@ loguru
 pytest
 pytest-asyncio
 httpx
+
+# ==========================
+# PLotting
+# ==========================
+plotly
